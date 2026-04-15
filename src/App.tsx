@@ -1,7 +1,13 @@
-import { Task1 } from "./tasks/controlled-input/task1";
+import { ControlledInput } from "./tasks/inputs/controlled_input";
+import { UncontrolledInput } from "./tasks/inputs/uncontrolled_input";
 
 function App() {
-  return <Task1 />;
+  return (
+    <>
+      <ControlledInput />
+      <UncontrolledInput />
+    </>
+  );
 }
 
 export default App;
