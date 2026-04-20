@@ -37,11 +37,10 @@ console.log([] == false); // true
 console.log([] === false); // false
 console.log([0] == false); // true
 console.log([0] === false); // false
-console.log({} + []); // 0
+console.log({} + []); // 0 в консоли / "[object Object]" как выражение
 console.log([] + {}); // "[object Object]"
 console.log({} + []); // "[object Object]"
-console.log({} + {}); // NaN
-console.log({} + {}); // "[object Object][object Object]"
+console.log(({} + {})); // "[object Object][object Object]"
 console.log([] + [] + 1); // "1"
 console.log([] - [] + 1); // 1
 console.log([1, 2] + [3, 4]); // "1,23,4"
