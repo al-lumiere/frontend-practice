@@ -182,10 +182,136 @@ const user = {
   prefix: "Result: ",
   show(value) {
     return this.prefix + value;
-  },
+  }
 };
 
 user.show = stats(user.show);
 console.log(user.show(10)); // preserves `this`
 console.log("user.show count:", user.show.count); // 1
 console.log("user.show lastResult:", user.show.lastResult); // "Result: 10"
+
+console.log("----------------------------------------");
+
+// =====================================================
+// 6. track(func)
+// Logs every call and counts how many times the function ran
+// =====================================================
+
+const greeterUser = {
+  name: "Ali",
+  greet(word) {
+    return word + ", " + this.name;
+  }
+};
+
+function track(func) {
+  function wrapper(...args) {
+    console.log("called");
+    wrapper.count++;
+    return func.apply(this, args);
+  }
+
+  wrapper.count = 0;
+  return wrapper;
+}
+
+greeterUser.greet = track(greeterUser.greet);
+console.log("track:", greeterUser.greet("Hi")); // called, then "Hi, Ali"
+console.log("track count:", greeterUser.greet.count); // 1
+
+const boundGreet = greeterUser.greet.bind(greeterUser, "Hello");
+console.log("track bound:", boundGreet()); // called, then "Hello, Ali"
+console.log("track count after bind call:", greeterUser.greet.count); // 2
+
+console.log("----------------------------------------");
+
+// =====================================================
+// 7. spy(func) with object method
+// Saves every call: arguments + result, preserves `this`
+// =====================================================
+
+const speakingUser = {
+  name: "Ali",
+  say(word, sign) {
+    return word + ", " + this.name + sign;
+  }
+};
+
+speakingUser.say = spy(speakingUser.say);
+console.log("method spy:", speakingUser.say("Hi", "!")); // "Hi, Ali!"
+console.log("method spy:", speakingUser.say("Hello", ".")); // "Hello, Ali."
+console.log("method spy calls:", speakingUser.say.calls);
+// [
+//   { args: ["Hi", "!"], result: "Hi, Ali!" },
+//   { args: ["Hello", "."], result: "Hello, Ali." }
+// ]
+
+const boundSay = speakingUser.say.bind(speakingUser);
+console.log("method spy bound:", boundSay("Bye", "!")); // "Bye, Ali!"
+console.log("method spy calls after bound call:", speakingUser.say.calls);
+
+console.log("----------------------------------------");
+
+// =====================================================
+// 8. limit(func, n)
+// Allows the function to run only n times
+// Then returns the last saved result
+// =====================================================
+
+const limitedUser = {
+  x: 10,
+  calc(a) {
+    return this.x + a;
+  }
+};
+
+function limit(func, n) {
+  function wrapper(...args) {
+    if (wrapper.calls >= n) {
+      return wrapper.lastResult;
+    }
+
+    const result = func.apply(this, args);
+    wrapper.calls++;
+    wrapper.lastResult = result;
+    return result;
+  }
+
+  wrapper.calls = 0;
+  wrapper.lastResult = undefined;
+  return wrapper;
+}
+
+limitedUser.calc = limit(limitedUser.calc, 2);
+console.log("limit:", limitedUser.calc.call(limitedUser, 5)); // 15
+console.log("limit:", limitedUser.calc.call(limitedUser, 7)); // 17
+console.log("limit:", limitedUser.calc.call(limitedUser, 3)); // 17
+console.log("limit calls:", limitedUser.calc.calls); // 2
+console.log("limit lastResult:", limitedUser.calc.lastResult); // 17
+
+const boundCalc = limitedUser.calc.bind(limitedUser);
+console.log("limit bound:", boundCalc(100)); // still 17 because limit reached
+
+console.log("----------------------------------------");
+
+// =====================================================
+// 9. log(func)
+// Simple logging decorator for object methods
+// =====================================================
+
+function log(func) {
+  return function (...args) {
+    console.log("call");
+    return func.apply(this, args);
+  };
+}
+
+const obj = {
+  x: 10,
+  fn() {
+    return this.x;
+  }
+};
+
+obj.fn = log(obj.fn);
+console.log("log:", obj.fn()); // call, then 10
