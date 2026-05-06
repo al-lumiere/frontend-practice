@@ -1,97 +1,278 @@
-let inp = document.getElementById("input");
-let out = document.getElementById("output");
+"use strict";
 
-// Debounce
+/**
+ * =====================================================
+ * DEBOUNCE PRACTICE
+ * =====================================================
+ *
+ * Topics:
+ * - setTimeout
+ * - clearTimeout
+ * - input events
+ * - early return
+ * - validation before debounce
+ * - controlled input + debounce
+ * - debounce + fetch
+ *
+ * Main idea:
+ * Debounce delays an action until the user stops triggering
+ * the event for a specific amount of time.
+ */
 
-let timeout
+/* =====================================================
+   1. Basic debounce
+===================================================== */
 
-inp.addEventListener(("input"), (e) => {
-  let value = e.target.value;
-  out.innerText = "Typing...";
+const debounceInput = document.getElementById("debounce-input");
+const debounceOutput = document.getElementById("debounce-output");
 
-  clearTimeout(timeout);
+let debounceTimer;
 
-  timeout = setTimeout(() => {
-    out.innerText = `Search: ${value}`
+debounceInput.addEventListener("input", (event) => {
+  const value = event.target.value;
+
+  debounceOutput.innerText = "Typing...";
+
+  clearTimeout(debounceTimer);
+
+  debounceTimer = setTimeout(() => {
+    debounceOutput.innerText = `Search: ${value}`;
   }, 500);
-})
+});
 
-// Debounce + Empty
+/* =====================================================
+   2. Debounce + empty state
+===================================================== */
 
-let timeout2
+const emptyInput = document.getElementById("empty-input");
+const emptyOutput = document.getElementById("empty-output");
 
-inp.addEventListener(("input"), (e) => {
-  let value = e.target.value;
+let emptyTimer;
 
-  clearTimeout(timeout2);
+emptyInput.addEventListener("input", (event) => {
+  const value = event.target.value;
+
+  clearTimeout(emptyTimer);
 
   if (value.length === 0) {
-    out.innerText = "Empty"
-    return
+    emptyOutput.innerText = "Empty";
+    return;
   }
 
-  out.innerText = "Typing...";
+  emptyOutput.innerText = "Typing...";
 
-  timeout2 = setTimeout(() => {
-    out.innerText = `Search: ${value}`
-  }, 500)
-})
+  emptyTimer = setTimeout(() => {
+    emptyOutput.innerText = `Search: ${value}`;
+  }, 500);
+});
 
-// Min length
+/* =====================================================
+   3. Debounce + min length validation
+===================================================== */
 
-let timeout3
+const minLengthInput = document.getElementById("min-length-input");
+const minLengthOutput = document.getElementById("min-length-output");
 
-inp.addEventListener(("input"), (e) => {
-  let value = e.target.value
+let minLengthTimer;
 
-  clearTimeout(timeout3);
+minLengthInput.addEventListener("input", (event) => {
+  const value = event.target.value;
+
+  clearTimeout(minLengthTimer);
 
   if (value.length === 0) {
-    out.innerText = "Empty"
-    return
+    minLengthOutput.innerText = "Empty";
+    return;
   }
 
   if (value.length < 3) {
-    out.innerText = "Too short"
-    return
+    minLengthOutput.innerText = "Too short";
+    return;
   }
 
-  out.innerText = "Typing..."
+  minLengthOutput.innerText = "Typing...";
 
-  timeout3 = setTimeout(() => {
-    out.innerText = `Search: ${value}`
-  }, 500)
-})
+  minLengthTimer = setTimeout(() => {
+    minLengthOutput.innerText = `Search: ${value}`;
+  }, 500);
+});
 
-// Debounce + Controlled
+/* =====================================================
+   4. Debounce + controlled input
+===================================================== */
 
-let timeout4
-let state = ""
+const controlledInput = document.getElementById("controlled-input");
+const controlledOutput = document.getElementById("controlled-output");
 
-inp.addEventListener(("input"), (e) => {
-  const nextValue = e.target.value;
+let controlledTimer;
+let controlledState = "";
 
-  clearTimeout(timeout4);
+controlledInput.addEventListener("input", (event) => {
+  const nextValue = event.target.value;
+
+  clearTimeout(controlledTimer);
 
   if (nextValue.length > 10) {
-    render("Too long")
-    return
+    renderControlledDebounce("Too long");
+    return;
   }
 
-  state = nextValue;
-  render("Typing...");
+  controlledState = nextValue;
+  renderControlledDebounce("Typing...");
 
-  timeout4 = setTimeout(() => {
-    render();
-  }, 500)
-})
+  controlledTimer = setTimeout(() => {
+    renderControlledDebounce();
+  }, 500);
+});
 
-function render (message = "") {
-  inp.value = state;
+function renderControlledDebounce(message = "") {
+  controlledInput.value = controlledState;
 
-  if (message.length !== 0) {
-    out.innerText = message
-  } else {
-    out.innerText = `Search: ${state}`
+  if (message) {
+    controlledOutput.innerText = message;
+    return;
   }
+
+  controlledOutput.innerText = `Search: ${controlledState}`;
 }
+
+/* =====================================================
+   5. Debounced search with fetch
+===================================================== */
+
+const searchInput = document.getElementById("search-input");
+const searchOutput = document.getElementById("search-output");
+
+let searchTimer;
+
+searchInput.addEventListener("input", (event) => {
+  const value = event.target.value.trim();
+
+  clearTimeout(searchTimer);
+
+  if (value.length === 0) {
+    renderSearch("Empty");
+    return;
+  }
+
+  if (value.length < 3) {
+    renderSearch("Too short");
+    return;
+  }
+
+  renderSearch("Typing...");
+
+  searchTimer = setTimeout(async () => {
+    try {
+      const response = await fetch(`/search?q=${value}`);
+
+      if (!response.ok) {
+        throw new Error("HTTP error");
+      }
+
+      const results = await response.json();
+
+      renderSearch("", results);
+    } catch (error) {
+      renderSearch(error.message);
+    }
+  }, 500);
+});
+
+function renderSearch(message = "", results = []) {
+  if (message) {
+    searchOutput.innerText = message;
+    return;
+  }
+
+  searchOutput.innerHTML = `
+    <ul>
+      ${
+        results.length
+          ? results.map((item) => `<li>${item.title}</li>`).join("")
+          : "<li>No results</li>"
+      }
+    </ul>
+  `;
+}
+
+/* =====================================================
+   6. Debounced users search
+===================================================== */
+
+const usersInput = document.getElementById("users-input");
+const usersOutput = document.getElementById("users-output");
+
+let usersTimer;
+
+usersInput.addEventListener("input", (event) => {
+  const value = event.target.value.trim();
+
+  clearTimeout(usersTimer);
+
+  if (value.length === 0) {
+    renderUsers("Empty");
+    return;
+  }
+
+  if (value.length < 2) {
+    renderUsers("Too short");
+    return;
+  }
+
+  renderUsers("Searching...");
+
+  usersTimer = setTimeout(async () => {
+    try {
+      const response = await fetch(`/users?search=${value}`);
+
+      if (!response.ok) {
+        throw new Error("HTTP error");
+      }
+
+      const users = await response.json();
+
+      renderUsers("", users);
+    } catch (error) {
+      renderUsers(error.message);
+    }
+  }, 400);
+});
+
+function renderUsers(message = "", users = []) {
+  if (message) {
+    usersOutput.innerText = message;
+    return;
+  }
+
+  usersOutput.innerHTML = `
+    <ul>
+      ${
+        users.length
+          ? users.map((user) => `<li>${user.name}</li>`).join("")
+          : "<li>No users</li>"
+      }
+    </ul>
+  `;
+}
+
+/**
+ * =====================================================
+ * SUMMARY
+ * =====================================================
+ *
+ * Debounce:
+ *   input event → clear old timer → create new timer
+ *
+ * Without clearTimeout:
+ *   all timers run one by one.
+ *
+ * Validation:
+ *   should happen before delayed expensive work.
+ *
+ * Fetch:
+ *   should be inside setTimeout if the request is debounced.
+ *
+ * Controlled debounce:
+ *   event → nextValue → validation → state → render → timeout
+ */
