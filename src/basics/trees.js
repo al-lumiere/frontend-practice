@@ -199,4 +199,118 @@ function countEven(node) {
   return current + countEven(node.left) + countEven(node.right)
 }
 
-console.log(countEven(tree4))
+// console.log(countEven(tree4))
+
+const tree5 = {
+  value: 5,
+
+  left: {
+    value: 2,
+
+    left: {
+      value: 1,
+      left: null,
+      right: null
+    },
+
+    right: null
+  },
+
+  right: {
+    value: 8,
+    left: null,
+    right: null
+  }
+};
+
+function sumOfLeaves(node) {
+  if (!node) {
+    return 0
+  }
+
+  if (!node.left && !node.right) {
+    return node.value
+  }
+
+  return sumOfLeaves(node.left) +  sumOfLeaves(node.right)
+}
+
+//console.log(sumOfLeaves(tree5));
+
+const tree6 = {
+  value: 8,
+
+  left: {
+    value: 3,
+
+    left: {
+      value: 1,
+      left: null,
+      right: null
+    },
+
+    right: {
+      value: 6,
+      left: null,
+      right: null
+    }
+  },
+
+  right: {
+    value: 10,
+    left: null,
+    right: null
+  }
+};
+
+function findMin(node) {
+  if (!node) {
+    return Infinity
+  }
+
+  let current = node.value;
+  let minL = Math.min(current, findMin(node.left));
+  let minR =  Math.min(current, findMin(node.right));
+
+  return Math.min(minL, minR)
+}
+
+//console.log(findMin(tree6))
+
+const tree7 = {
+  value: 1,
+
+  left: {
+    value: 2,
+
+    left: {
+      value: 4,
+      left: null,
+      right: null
+    },
+
+    right: null
+  },
+
+  right: {
+    value: 3,
+    left: null,
+    right: null
+  }
+};
+
+function heightDifference(tree) {
+  function countDepth(tree) {
+    if (!tree) {
+      return 0
+    }
+    return  1 + Math.max(countDepth(tree.left), countDepth(tree.right))
+  }
+
+  let left = countDepth(tree.left);
+  let right = countDepth(tree.right);
+
+  return left - right
+}
+
+console.log(heightDifference(tree7))
