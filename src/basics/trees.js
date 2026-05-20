@@ -547,4 +547,168 @@ function hasPathSum(node, target) {
   return hasPathSum(node.left, newT) || hasPathSum(node.right, newT);
 }
 
-console.log(hasPathSum(tree12, 22));
+//console.log(hasPathSum(tree12, 22));
+
+const tree13 = {
+  value: 1,
+
+  left: {
+    value: 2,
+    left: null,
+    right: null
+  },
+
+  right: {
+    value: 3,
+    left: null,
+    right: null
+  }
+};
+
+const tree14 = {
+  value: 1,
+
+  left: {
+    value: 2,
+    left: null,
+    right: null
+  },
+
+  right: {
+    value: 3,
+    left: null,
+    right: null
+  }
+};
+
+function isSame(nodeOne, nodeTwo) {
+  if (!nodeOne && !nodeTwo) {
+    return true
+  }
+
+  if (!nodeOne || !nodeTwo) {
+    return false
+  }
+
+  return  nodeOne.value === nodeTwo.value && isSame(nodeOne.left, nodeTwo.left) && isSame(nodeOne.right, nodeTwo.right)
+}
+
+//console.log(isSame(tree13, tree14));
+
+const tree15 = {
+  value: 5,
+
+  left: {
+    value: 2,
+
+    left: {
+      value: 1,
+      left: null,
+      right: null
+    },
+
+    right: {
+      value: 8,
+      left: null,
+      right: null
+    }
+  },
+
+  right: {
+    value: 7,
+    left: null,
+    right: null
+  }
+};
+
+function countOdd(node) {
+  if (!node) {
+    return 0
+  }
+
+  let current = 0;
+
+  if (node.value % 2 !== 0) {
+    current++
+  }
+
+  return current + countOdd(node.left) + countOdd(node.right)
+}
+
+console.log(countOdd(tree15));
+
+const tree16 = {
+  value: 1,
+
+  left: {
+    value: 2,
+
+    left: {
+      value: 3,
+
+      left: {
+        value: 4,
+        left: null,
+        right: null
+      },
+
+      right: null
+    },
+
+    right: null
+  },
+
+  right: null
+};
+
+function mDepth(node) {
+  if (!node) {
+    return 0
+  }
+
+  let current = 1;
+
+  let left = current + mDepth(node.left);
+  let right = current + mDepth(node.right);
+
+  return Math.max(left, right)
+}
+
+console.log(mDepth(tree16))
+
+const tree17 = {
+  value: 10,
+
+  left: {
+    value: 4,
+    left: null,
+    right: null
+  },
+
+  right: {
+    value: 20,
+
+    left: {
+      value: 8,
+      left: null,
+      right: null
+    },
+
+    right: null
+  }
+};
+
+function hasV (node, target) {
+  if (!node) {
+    return false
+  }
+
+  if (node.value === target) {
+    return true
+  }
+
+  return hasV(node.left, target) || hasV(node.right, target)
+}
+
+console.log(hasV(tree17, 8));
+console.log(hasV(tree17, 999));
