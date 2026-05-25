@@ -35,6 +35,7 @@ Each task is implemented as a separate file and includes:
 - Dropdowns, modals, and other UI patterns
 - Forms and validation
 - Performance basics
+- Algoritms practice 
 
 ## Goals
 
