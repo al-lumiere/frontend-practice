@@ -342,10 +342,10 @@ queue:
 
 function hasPathBFS(graph, from, to) {
   let visited = new Set();
-  let stack = [from];
+  let queue = [from];
 
-  while (stack.length) {
-    let cur = stack.pop();
+  while (queue.length) {
+    let cur = queue.shift();
 
     if (cur === to) {
       return true;
@@ -362,7 +362,7 @@ function hasPathBFS(graph, from, to) {
     visited.add(cur);
 
     for (let nei of graph[cur]) {
-      stack.push(nei);
+      queue.push(nei);
     }
   }
 
