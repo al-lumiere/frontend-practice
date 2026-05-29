@@ -166,3 +166,60 @@ test("minSubarrayLen: no answer", minSubarrayLen([1, 1, 1, 1], 5), 0);
 test("minSubarrayLen: one element", minSubarrayLen([5, 1, 3], 5), 1);
 test("minSubarrayLen: whole array", minSubarrayLen([1, 2, 3], 6), 3);
 test("minSubarrayLen: middle", minSubarrayLen([1, 4, 4], 4), 1);
+
+/*
+=====================================================
+longestSubstringWithKDistinct
+=====================================================
+
+Дана строка str и число k.
+
+Нужно вернуть длину самой длинной подстроки,
+в которой не больше k разных символов.
+
+Примеры:
+
+"eceba", k = 2 -> 3
+Потому что "ece"
+
+"aa", k = 1 -> 2
+
+"aabbcc", k = 2 -> 4
+Потому что "aabb" или "bbcc"
+*/
+
+function longestSubstringWithKDistinct(str, k) {
+  let uniq = {};
+  let max = -Infinity;
+  let left = 0;
+
+  for (let right = 0; right <= str.length - 1; right++) {}
+
+  return max === -Infinity ? 0 : max;
+}
+
+test(
+  "longestSubstringWithKDistinct: eceba k=2",
+  longestSubstringWithKDistinct("eceba", 2),
+  3,
+);
+test(
+  "longestSubstringWithKDistinct: aa k=1",
+  longestSubstringWithKDistinct("aa", 1),
+  2,
+);
+test(
+  "longestSubstringWithKDistinct: aabbcc k=2",
+  longestSubstringWithKDistinct("aabbcc", 2),
+  4,
+);
+test(
+  "longestSubstringWithKDistinct: abc k=3",
+  longestSubstringWithKDistinct("abc", 3),
+  3,
+);
+test(
+  "longestSubstringWithKDistinct: abc k=0",
+  longestSubstringWithKDistinct("abc", 0),
+  0,
+);
