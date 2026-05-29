@@ -514,8 +514,47 @@ Time: O(V + E)
 Memory: O(V)
 */
 
-function shortestPathBFS(graph, from, to) {}
+function shortestPathBFS(graph, from, to) {
+  let visited = new Set([from]);
+  let parent = new Map();
 
+  let queue = [from];
+  let index = 0;
+
+  while (index < queue.length) {
+    let cur = queue[index];
+    index++;
+
+    if (cur === to) {
+      const path = [];
+      let node = to;
+
+      while (node !== undefined) {
+        path.push(node);
+
+        if (node === from) {
+          break;
+        }
+
+        node = parent.get(node);
+      }
+
+      return path.reverse();
+    }
+
+    for (let nei of graph[cur] || []) {
+      if (visited.has(nei)) {
+        continue;
+      }
+
+      visited.add(nei);
+      parent.set(nei, cur);
+      queue.push(nei);
+    }
+  }
+
+  return null;
+}
 /*
 =====================================================
 Async graphs
@@ -619,7 +658,46 @@ Memory: O(V)
 */
 
 async function shortestRouteAsync(from, to, fetchFlights) {
-  // TODO
+  let visited = new Set([from]);
+  let parent = new Map();
+
+  let queue = [from];
+  let index = 0;
+
+  while (index < queue.length) {
+    let cur = queue[index];
+    index++;
+
+    if (cur === to) {
+      let path = [];
+      let node = to;
+
+      while (node !== undefined) {
+        path.push(node);
+
+        if (node === from) {
+          break;
+        }
+
+        node = parent.get(node);
+      }
+      return path.reverse();
+    }
+
+    let flights = (await fetchFlights(cur)) || [];
+
+    for (let nei of flights) {
+      if (visited.has(nei)) {
+        continue;
+      }
+
+      visited.add(nei);
+      queue.push(nei);
+      parent.set(nei, cur);
+    }
+  }
+
+  return [];
 }
 
 /*
@@ -834,26 +912,26 @@ async function runTests() {
       expected: true,
     },
 
-    // {
-    //   name: "shortestPathBFS: A -> S",
-    //   actual: () => shortestPathBFS(graphForShortest, "A", "S"),
-    //   expected: ["A", "D", "S"],
-    // },
-    // {
-    //   name: "shortestPathBFS: A -> C",
-    //   actual: () => shortestPathBFS(graphForShortest, "A", "C"),
-    //   expected: ["A", "B", "C"],
-    // },
-    // {
-    //   name: "shortestPathBFS: B -> D false",
-    //   actual: () => shortestPathBFS(graphForShortest, "B", "D"),
-    //   expected: null,
-    // },
-    // {
-    //   name: "shortestPathBFS: same vertex",
-    //   actual: () => shortestPathBFS(graphForShortest, "A", "A"),
-    //   expected: ["A"],
-    // },
+    {
+      name: "shortestPathBFS: A -> S",
+      actual: () => shortestPathBFS(graphForShortest, "A", "S"),
+      expected: ["A", "D", "S"],
+    },
+    {
+      name: "shortestPathBFS: A -> C",
+      actual: () => shortestPathBFS(graphForShortest, "A", "C"),
+      expected: ["A", "B", "C"],
+    },
+    {
+      name: "shortestPathBFS: B -> D false",
+      actual: () => shortestPathBFS(graphForShortest, "B", "D"),
+      expected: null,
+    },
+    {
+      name: "shortestPathBFS: same vertex",
+      actual: () => shortestPathBFS(graphForShortest, "A", "A"),
+      expected: ["A"],
+    },
 
     {
       name: "hasRouteAsync: A -> S",
