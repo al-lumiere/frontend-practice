@@ -657,7 +657,7 @@ function isValidBrackets(str) {
     ) {
       stack.pop();
     } else {
-      return false 
+      return false;
     }
   }
 
