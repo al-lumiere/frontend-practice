@@ -1,55 +1,121 @@
 # Frontend Interview Practice
 
-This repository contains my solutions to frontend interview-style tasks, focused on building interactive UI components and strengthening core frontend concepts.
+This repository contains my solutions to frontend interview-style tasks.
+
+The main goal is to practice building interactive UI components, strengthen core JavaScript and React concepts, and improve my ability to explain technical solutions clearly during interviews.
 
 ## About
 
-I use this repository to practice real-world frontend problems, improve my understanding of React and JavaScript, and prepare for technical interviews.
+I use this repository as a structured practice space for frontend interview preparation.
 
-The main focus is on:
-- UI logic and state management
-- Writing clean and predictable components
-- Explaining solutions clearly (as in interviews)
+The focus is not only on getting a working solution, but also on writing code that is:
 
-## Structure
+- clear and predictable
+- easy to reason about
+- close to real frontend development tasks
+- suitable for explaining during a technical interview
 
-Solutions are organized by topics.
-
-Each task is implemented as a separate file and includes:
-- The problem statement (as a comment at the top)
-- The solution
-- Edge cases and considerations
-
-## Tech stack
+## Tech Stack
 
 - React
 - TypeScript
 - Vite
+- JavaScript
+- HTML
+- CSS
 
-## Topics covered
+## Topics Covered
+
+### React and UI Logic
 
 - Controlled and uncontrolled components
-- Debounce / throttle
-- Async UI (loading, error states)
-- Lists and state management
-- Dropdowns, modals, and other UI patterns
+- Component state management
+- Props and component composition
+- Lists and conditional rendering
 - Forms and validation
-- Performance basics
-- Algoritms practice 
+- Dropdowns
+- Modals
+- Tabs
+- Accordions
+- Common UI patterns
+
+### Asynchronous UI
+
+- Loading states
+- Error states
+- Empty states
+- Fetching and displaying data
+- Retry logic
+
+### JavaScript Utilities
+
+- Debounce
+- Throttle
+- Once
+- Basic memoization
+- Array methods
+- Objects
+- Maps
+- Sets
+
+### Algorithms Practice
+
+- Strings and arrays
+- Hash maps and frequency counters
+- Two pointers
+- Stacks and queues
+- Trees
+- Graphs
+- BFS and DFS
+- Basic time and space complexity analysis
+
+## Repository Structure
+
+Solutions are organized by topic.
+
+Each task is implemented as a separate file or component and usually includes:
+
+- the problem statement
+- the implementation
+- edge cases
+- notes about time and space complexity
+- possible improvements or alternative approaches
+
+Example structure:
+
+```text
+src/
+  tasks/
+    react-components/
+    forms/
+    async-ui/
+    js-utils/
+    algorithms/
+```
+
+## How I Approach Tasks
+
+For each problem, I try to practice the full interview flow:
+
+1. Understand the requirements
+2. Clarify edge cases
+3. Explain the idea before coding
+4. Implement a clean solution
+5. Test the solution with examples
+6. Analyze time and space complexity
+7. Refactor if needed
 
 ## Goals
 
 - Build confidence in frontend technical interviews
-- Improve ability to reason about UI and state
-- Practice explaining solutions clearly and structurally
+- Improve React and TypeScript skills
+- Practice common frontend coding tasks
+- Strengthen JavaScript fundamentals
 - Develop reusable UI patterns
+- Get faster and more consistent at implementing solutions
+- Learn to explain technical decisions clearly
 
 ## Progress
 
-- Practicing daily with structured tasks
-- Simulating real interview scenarios
-- Continuously refining solutions and explanations
-
----
-
-Feel free to explore the tasks and solutions!
+This repository is updated as I continue practicing interview tasks, improving existing solutions, and adding new topics.
+The focus is on steady progress, cleaner implementations, and better explanations over time.
