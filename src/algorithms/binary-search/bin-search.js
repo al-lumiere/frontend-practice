@@ -43,11 +43,8 @@ Example:
 binarySearch([1, 3, 5, 7], 5) -> 2
 binarySearch([1, 3, 5, 7], 4) -> -1
 
-Time complexity:
-TODO:
-
-Memory complexity:
-TODO:
+Time complexity: O(log n)
+Memory complexity: O(1)
 */
 
 function binarySearch(nums, target) {
@@ -113,11 +110,8 @@ searchInsert([1, 3, 5, 6], 7) -> 4
 Hint:
 This is the first index where nums[i] >= target.
 
-Time complexity:
-TODO:
-
-Memory complexity:
-TODO:
+Time complexity: O(log n)
+Memory complexity: O(1)
 */
 
 function searchInsert(nums, target) {
@@ -174,11 +168,8 @@ versions:
 
 answer: 4
 
-Time complexity:
-TODO:
-
-Memory complexity:
-TODO:
+Time complexity: O(log n)
+Memory complexity: O(1)
 */
 
 function createIsBadVersion(firstBad) {
@@ -188,7 +179,7 @@ function createIsBadVersion(firstBad) {
 }
 
 function firstBadVersion(n, isBadVersion) {
-  let left = 0;
+  let left = 1;
   let right = n;
 
   while (left <= right) {
@@ -241,15 +232,46 @@ Example:
 searchRange([5, 7, 7, 8, 8, 10], 8) -> [3, 4]
 searchRange([5, 7, 7, 8, 8, 10], 6) -> [-1, -1]
 
-Time complexity:
-TODO:
-
-Memory complexity:
-TODO:
+Time complexity: O(log n)
+Memory complexity: O(1)
 */
 
 function searchRange(nums, target) {
-  // TODO
+  let left = 0;
+  let right = nums.length - 1;
+  let ans = [-1, -1];
+
+  while (left <= right) {
+    let middle = Math.floor((right - left) / 2 + left);
+
+    if (nums[middle] < target) {
+      left = middle + 1;
+    } else if (nums[middle] >= target) {
+      right = middle - 1;
+    }
+  }
+
+  if (nums[left] === target) {
+    ans[0] = left;
+  } else {
+    return ans;
+  }
+
+  right = nums.length - 1;
+
+  while (left <= right) {
+    let middle = Math.floor((right - left) / 2 + left);
+
+    if (nums[middle] <= target) {
+      left = middle + 1;
+    } else if (nums[middle] > target) {
+      right = middle - 1;
+    }
+  }
+
+  ans[1] = right;
+
+  return ans;
 }
 
 assertDeepEqual(
