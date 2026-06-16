@@ -371,51 +371,96 @@ try {
 
 // ## Часть 8. Мини-задачи
 
-// ### 37. First unique character
+// ### 37.
 
 // Напиши функцию, которая возвращает первый неповторяющийся символ в строке.
 
-// ```js
-// firstUnique('leetcode'); // 'l'
-// firstUnique('aabbc'); // 'c'
-// firstUnique('aabb'); // null
-// ```
+function firstUnique(str) {
+  let obj = {};
 
-// ---
+  for (let el of str) {
+    obj[el] = (obj[el] || 0) + 1;
+  }
 
-// ### 38. Group by
+  for (let el of str) {
+    if (obj[el] === 1) return el
+  }
+
+  return null
+}
+
+firstUnique('leetcode'); // 'l'
+firstUnique('aabbc'); // 'c'
+firstUnique('aabb'); // null
+
+
+// ### 38.
 
 // Напиши функцию `groupBy(arr, key)`, которая группирует объекты по ключу.
 
-// ```js
-// const users = [
-//   { name: 'Anna', role: 'admin' },
-//   { name: 'Bob', role: 'user' },
-//   { name: 'Kate', role: 'admin' },
-// ];
+function groupBy(arr, key) {
+  let fin = {};
 
-// groupBy(users, 'role');
-// ```
+  for (let el of arr) {
+    if (fin[el[key]]) {
+      fin[el[key]].push(el);
+    } else {
+      fin[el[key]] = [el];
+    }
+  }
 
-// ---
+  return fin
+}
 
-// ### 39. Flatten one level
+
+const users = [
+  { name: 'Anna', role: 'admin' },
+  { name: 'Bob', role: 'user' },
+  { name: 'Kate', role: 'admin' },
+];
+
+groupBy(users, 'role');
+
+// ### 39.
 
 // Напиши функцию, которая раскрывает массив на один уровень вложенности.
 
-// ```js
-// flattenOneLevel([1, [2, 3], [4], 5]); // [1, 2, 3, 4, 5]
-// ```
+function flattenOneLevel (arr) {
+  let fin = [];
 
-// ---
+  for (let el of arr) {
+    if (Array.isArray(el)) {
+      fin.push(...el);
+    } else {
+      fin.push(el);
+    }
+  }
 
-// ### 40. isAnagram
+  return fin
+}
+
+flattenOneLevel([1, [2, 3], [4], 5]); // [1, 2, 3, 4, 5]
+
+// ### 40.
 
 // Напиши функцию, которая проверяет, являются ли строки анаграммами.
 
-// ```js
-// isAnagram('listen', 'silent'); // true
-// isAnagram('hello', 'world'); // false
-// ```
+function isAnagram (str1, str2) {
+  if (str1.length !== str2.length) return false
 
-// ---
+  let obj = {};
+
+  for (let i = 0; i <= str1.length - 1; i++) {
+    obj[str1[i]] = (obj[str1[i]] || 0) + 1;
+    obj[str2[i]] = (obj[str2[i]] || 0) - 1;
+  }
+
+  for (let key of Object.keys(obj)) {
+    if (obj[key] !== 0) return false
+  }
+
+  return true
+}
+
+isAnagram('listen', 'silent'); // true
+isAnagram('hello', 'world'); // false
