@@ -20,49 +20,31 @@ function testHoisting() {
   console.log(value); // 42
 }
 
-testHoisting(); 
+testHoisting();
 
 
 // ------------------------------------------------------
-// 2. Типы и сравнения
+// 2. Types
 // ------------------------------------------------------
 
-/*
-Вопрос 3.
-Что выведется?
-*/
+console.log(typeof null); // object
+console.log(typeof []); // object
+console.log(typeof NaN); // number
+console.log(Number.isNaN(NaN)); // true
+console.log(isNaN("hello")); // false
 
-console.log(typeof null);
-console.log(typeof []);
-console.log(typeof NaN);
-console.log(Number.isNaN(NaN));
-console.log(isNaN("hello"));
+// ---
 
-// Ответ:
-
-/*
-Вопрос 4.
-Объясни результат каждого сравнения.
-*/
-
-console.log(0 == false);
-console.log(0 === false);
-console.log(null == undefined);
-console.log(null === undefined);
-console.log([] == false);
-console.log([] === false);
-
-// Ответ:
-
+console.log(0 == false); // true
+console.log(0 === false); // false
+console.log(null == undefined); // true
+console.log(null === undefined); // false
+console.log([] == false); // true
+console.log([] === false); // false
 
 // ------------------------------------------------------
-// 3. Область видимости и замыкания
+// 3. Scope
 // ------------------------------------------------------
-
-/*
-Вопрос 5.
-Что выведется и почему?
-*/
 
 function createCounter() {
   let count = 0;
@@ -76,21 +58,26 @@ function createCounter() {
 const counter1 = createCounter();
 const counter2 = createCounter();
 
-console.log(counter1());
-console.log(counter1());
-console.log(counter2());
-console.log(counter1());
+console.log(counter1()); // 1
+console.log(counter1()); // 2
+console.log(counter2()); // 1
+console.log(counter1()); // 3
 
-// Ответ:
-
-/*
-Задача 6.
-Реализуй функцию once(fn), которая вызывает fn только один раз.
-Все последующие вызовы должны возвращать результат первого вызова.
-*/
+// ---
 
 function once(fn) {
-  // TODO
+  let called = false;
+  let result
+
+  return function wrapper(...args) {
+    if (called) {
+      return result
+    }
+
+    called = true;
+    result = fn.apply(this, args);
+    return result
+  }
 }
 
 const init = once(function (name) {
@@ -103,13 +90,8 @@ const init = once(function (name) {
 
 
 // ------------------------------------------------------
-// 4. Функции и this
+// 4. Function & this
 // ------------------------------------------------------
-
-/*
-Вопрос 7.
-Что выведется?
-*/
 
 const user = {
   name: "Alex",
@@ -118,17 +100,12 @@ const user = {
   },
 };
 
-user.sayHi();
+user.sayHi(); // Alex
 
 const say = user.sayHi;
-say();
+say(); // undefined
 
-// Ответ:
-
-/*
-Вопрос 8.
-Что выведется и почему?
-*/
+// ---
 
 const person = {
   name: "Mira",
@@ -140,15 +117,10 @@ const person = {
   },
 };
 
-person.regular();
-person.arrow();
+person.regular(); // Mira
+person.arrow(); // undefined
 
-// Ответ:
-
-/*
-Задача 9.
-Исправь код так, чтобы метод showName корректно выводил имя через setTimeout.
-*/
+// ---
 
 const student = {
   name: "Nika",
@@ -160,19 +132,12 @@ const student = {
   },
 };
 
-// student.showName();
-
-// Исправление:
+// student.showName.apply(student);
 
 
 // ------------------------------------------------------
-// 5. Массивы и объекты
+// 5. Arrays & objects
 // ------------------------------------------------------
-
-/*
-Вопрос 10.
-Что выведется?
-*/
 
 const arr = [1, 2, 3];
 
@@ -180,17 +145,22 @@ const mapped = arr.map((num) => {
   num * 2;
 });
 
-console.log(mapped);
+console.log(mapped); // [undefined, undefined, undefined]
 
-// Ответ:
-
-/*
-Задача 11.
-Реализуй функцию groupBy(arr, key), которая группирует объекты по указанному ключу.
-*/
+// ---
 
 function groupBy(arr, key) {
-  // TODO
+  let result = {};
+
+  for (let el of arr) {
+    if (result[el[key]]) {
+      result[el[key]].push(el);
+    } else {
+    result[el[key]] = [el]
+    }
+  }
+
+  return result
 }
 
 const users = [
