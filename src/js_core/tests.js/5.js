@@ -3,7 +3,7 @@
 // ------------------------------------------------------
 
 console.log(a); // undefined
-console.log(b); // error
+console.log(b); // Referror
 
 var a = 10;
 let b = 20;
@@ -30,8 +30,8 @@ testHoisting();
 console.log(typeof null); // object
 console.log(typeof []); // object
 console.log(typeof NaN); // number
-console.log(Number.isNaN(NaN)); // true
-console.log(isNaN("hello")); // false
+console.log(Number.isNaN(NaN)); // false, не приводит типы
+console.log(isNaN("hello")); // true, приводит типы
 
 // ---
 
@@ -103,7 +103,7 @@ const user = {
 user.sayHi(); // Alex
 
 const say = user.sayHi;
-say(); // undefined
+say(); // undefined / error in strict mode
 
 // ---
 
@@ -125,14 +125,14 @@ person.arrow(); // undefined
 const student = {
   name: "Nika",
 
-  showName() {
-    setTimeout(function () {
+ showName() {
+    setTimeout(() => {
       console.log(this.name);
     }, 100);
   },
 };
 
-// student.showName.apply(student);
+// student.showName();
 
 
 // ------------------------------------------------------
@@ -180,29 +180,18 @@ const users = [
 //   ]
 // }
 
-/*
-Вопрос 12.
-Что выведется?
-*/
+// ---
 
 const obj1 = { a: 1 };
 const obj2 = obj1;
 const obj3 = { a: 1 };
 
-console.log(obj1 === obj2);
-console.log(obj1 === obj3);
-
-// Ответ:
-
+console.log(obj1 === obj2); //  true
+console.log(obj1 === obj3); // false
 
 // ------------------------------------------------------
 // 6. Destructuring / spread / rest
 // ------------------------------------------------------
-
-/*
-Вопрос 13.
-Что выведется?
-*/
 
 const data = {
   id: 1,
@@ -216,18 +205,13 @@ const {
   profile: { name },
 } = data;
 
-console.log(name);
-// console.log(profile);
+console.log(name); // Alex?
+// console.log(profile); // error
 
-// Ответ:
-
-/*
-Задача 14.
-Напиши функцию sumAll, которая принимает любое количество чисел и возвращает сумму.
-*/
+// ---
 
 function sumAll(...numbers) {
-  // TODO
+  return numbers.reduce((a, b) => a + b, 0);
 }
 
 // console.log(sumAll(1, 2, 3)); // 6
@@ -235,13 +219,8 @@ function sumAll(...numbers) {
 
 
 // ------------------------------------------------------
-// 7. Промисы и async/await
+// 7. Promise, async/await
 // ------------------------------------------------------
-
-/*
-Вопрос 15.
-В каком порядке выведутся логи?
-*/
 
 console.log("A");
 
@@ -255,12 +234,9 @@ Promise.resolve().then(() => {
 
 console.log("D");
 
-// Ответ:
+// A, D, C, B
 
-/*
-Вопрос 16.
-Что выведется?
-*/
+// ---
 
 async function asyncTest() {
   console.log("1");
@@ -274,7 +250,7 @@ console.log("3");
 asyncTest();
 console.log("4");
 
-// Ответ:
+// 3, 1, 4, 2
 
 /*
 Задача 17.
@@ -285,12 +261,18 @@ console.log("4");
 */
 
 async function getText(url) {
-  // TODO
+  let response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("HTTP error");
+  }
+
+  return await response.text()
 }
 
 
 // ------------------------------------------------------
-// 8. Ошибки
+// 8. Error
 // ------------------------------------------------------
 
 /*
@@ -361,25 +343,42 @@ class User {
 // 10. Мини-задачи как на собеседовании
 // ------------------------------------------------------
 
-/*
-Задача 22.
-Реализуй debounce(fn, delay).
-Функция должна вызываться только после того,
-как прошло delay мс с последнего вызова.
-*/
-
 function debounce(fn, delay) {
-  // TODO
+  let timer
+
+  return function wrapper(...args) {
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      return fn.apply(this, args);
+    }, delay);
+  }
 }
 
-/*
-Задача 23.
-Реализуй throttle(fn, delay).
-Функция должна вызываться не чаще одного раза в delay мс.
-*/
+// ---
 
 function throttle(fn, delay) {
-  // TODO
+  let isThrottled = false;
+  let lastArgs = null;
+
+  return function wrapper(...args) {
+    if (isThrottled) {
+      lastArgs = args;
+      return
+    }
+
+    isThrottled = true;
+    fn.apply(this, args);
+
+    setTimeout(() => {
+      if (lastArgs !== null) {
+        fn.apply(this, lastArgs);
+        lastArgs = null; 
+      }
+
+      isThrottled = false;
+    }, delay);
+  }
 }
 
 /*
